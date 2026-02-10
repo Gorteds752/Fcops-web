@@ -1,0 +1,411 @@
+/* Обновленные стили для авторизации по номеру телефона */
+.phone-input-container {
+    margin-bottom: 20px;
+}
+
+.phone-input-wrapper {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 8px;
+    background: rgba(30, 41, 59, 0.6);
+    transition: all 0.2s;
+}
+
+.phone-input-wrapper:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.country-selector {
+    position: relative;
+    min-width: 100px;
+    background: rgba(30, 41, 59, 0.8);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    cursor: pointer;
+}
+
+.selected-country {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.country-flag {
+    font-size: 20px;
+}
+
+#phoneNumber {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    padding: 16px;
+    font-size: 16px;
+    outline: none;
+}
+
+#phoneNumber::placeholder {
+    color: var(--text-secondary);
+}
+
+/* Стили для кода подтверждения */
+.code-input-container {
+    margin-bottom: 20px;
+}
+
+.code-inputs {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    justify-content: center;
+}
+
+.code-digit {
+    width: 56px;
+    height: 68px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    transition: all 0.2s;
+}
+
+.code-digit:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background: rgba(30, 41, 59, 0.8);
+}
+
+.timer {
+    text-align: center;
+    margin: 24px 0;
+    padding: 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.btn-resend {
+    width: 100%;
+    padding: 16px;
+    background: rgba(30, 41, 59, 0.6);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-resend:hover {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+/* Стили для шага профиля */
+.avatar-upload {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.avatar-preview {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    background: var(--primary-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 48px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: 4px solid rgba(59, 130, 246, 0.3);
+}
+
+.avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    color: white;
+    font-size: 24px;
+}
+
+.avatar-preview:hover .avatar-overlay {
+    opacity: 1;
+}
+
+.btn-change-avatar {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.btn-change-avatar:hover {
+    color: var(--accent-hover);
+}
+
+.username-input {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(30, 41, 59, 0.6);
+    transition: all 0.2s;
+}
+
+.username-input:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.username-prefix {
+    padding: 16px;
+    background: rgba(30, 41, 59, 0.8);
+    color: var(--text-secondary);
+    font-weight: 500;
+    border-right: 1px solid var(--border-color);
+}
+
+.username-input input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    padding: 16px;
+    font-size: 16px;
+    outline: none;
+}
+
+/* Кнопки авторизации */
+.btn-next, .btn-verify, .btn-complete {
+    width: 100%;
+    padding: 18px 24px;
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-next::before, .btn-verify::before, .btn-complete::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.btn-next:hover, .btn-verify:hover, .btn-complete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-next:hover::before, .btn-verify:hover::before, .btn-complete:hover::before {
+    opacity: 1;
+}
+
+.btn-verify:disabled {
+    background: #475569;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-verify:disabled::before {
+    display: none;
+}
+
+/* Соглашение с условиями */
+.terms-agreement {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 24px 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.terms-agreement input[type="checkbox"] {
+    margin-top: 3px;
+    accent-color: var(--accent);
+}
+
+.terms-link {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+/* Кнопка назад */
+.back-btn {
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s;
+    border: none;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(-2px);
+}
+
+/* Индикатор печати */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: var(--card-bg);
+    border-radius: 18px;
+    border: 1px solid var(--border-color);
+    max-width: 140px;
+    margin: 10px 0;
+    animation: typingAppear 0.3s ease-out;
+}
+
+@keyframes typingAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.typing-dots {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.typing-dots .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-secondary);
+    animation: typingDot 1.5s infinite ease-in-out;
+}
+
+.typing-dots .dot:nth-child(1) { animation-delay: 0s; }
+.typing-dots .dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots .dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingDot {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+    30% {
+        transform: translateY(-4px);
+        opacity: 1;
+    }
+}
+
+.typing-indicator span {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* Основные стили для NeoGram */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: #0f172a;
+    color: #f8fafc;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100% !important;
+        height: 60vh;
+    }
+    
+    .main-chat {
+        height: 40vh;
+    }
+    
+    .modal-content {
+        margin: 10px;
+        max-width: calc(100% - 20px) !important;
+    }
+}

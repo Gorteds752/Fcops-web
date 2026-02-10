@@ -1,0 +1,3458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoGram • Hybrid Messenger</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --dark-bg: #0f172a;
+            --sidebar-bg: #1e293b;
+            --chat-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border-color: #334155;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.5);
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+        }
+        
+        /* Темы */
+        .theme-light {
+            --dark-bg: #f1f5f9;
+            --sidebar-bg: #ffffff;
+            --chat-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+        }
+        
+        .theme-dark {
+            --dark-bg: #0f172a;
+            --sidebar-bg: #1e293b;
+            --chat-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+        }
+        
+        .theme-midnight {
+            --dark-bg: #0a0a0f;
+            --sidebar-bg: #141421;
+            --chat-bg: #0a0a0f;
+            --card-bg: #141421;
+            --text-primary: #e2e8f0;
+            --text-secondary: #8a94a6;
+            --border-color: #2d3748;
+            --accent: #805ad5;
+            --accent-hover: #6b46c1;
+        }
+        
+        .theme-ocean {
+            --dark-bg: #0c4a6e;
+            --sidebar-bg: #075985;
+            --chat-bg: #0c4a6e;
+            --card-bg: #075985;
+            --text-primary: #e0f2fe;
+            --text-secondary: #7dd3fc;
+            --border-color: #0ea5e9;
+            --accent: #06b6d4;
+            --accent-hover: #0891b2;
+        }
+        
+        /* Фоны чата */
+        .chat-bg-default {
+            background: var(--chat-bg);
+        }
+        
+        .chat-bg-pattern {
+            background: var(--chat-bg) url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0LjVjMCAxLjM4LTEuMTIgMi41LTIuNSAyLjVIMjYuNWMtMS4zOCAwLTIuNS0xLjEyLTIuNS0yLjV2LTljMC0xLjM4IDEuMTItMi41IDIuNS0yLjVoN2MxLjM4IDAgMi41IDEuMTIgMi41IDIuNXY5em0tMTggOWMwIDEuMzgtMS4xMiAyLjUtMi41IDIuNUg4LjVjLTEuMzggMC0yLjUtMS4xMi0yLjUtMi41di05YzAtMS4zOCAxLjEyLTIuNSAyLjUtMi41aDdjMS4zOCAwIDIuNSAxLjEyIDIuNSAyLjV2OXpNMzYgMTYuNWMwIDEuMzgtMS4xMiAyLjUtMi41IDIuNUgyNi41Yy0xLjM4IDAtMi41LTEuMTItMi41LTIuNXYtOWMwLTEuMzggMS4xMi0yLjUgMi41LTIuNWg3YzEuMzggMCAyLjUgMS4xMiAyLjUgMi41djl6Ii8+PC9nPjwvZz48L3N2Zz4=');
+        }
+        
+        .chat-bg-grid {
+            background: 
+                linear-gradient(90deg, var(--border-color) 1px, transparent 1px) 0 0 / 20px 20px,
+                linear-gradient(var(--border-color) 1px, transparent 1px) 0 0 / 20px 20px,
+                var(--chat-bg);
+        }
+        
+        .chat-bg-gradient {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--sidebar-bg) 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .auth-visible #mainApp,
+        .app-visible #authModal {
+            display: none !important;
+        }
+        
+        .auth-visible #authModal {
+            display: flex !important;
+        }
+        
+        .app-visible #mainApp {
+            display: flex !important;
+        }
+        
+        /* Модальные окна */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px; /* Увеличено для настроек */
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .modal-header {
+            padding: 30px 30px 15px;
+            text-align: center;
+            background: var(--primary-gradient);
+            position: relative;
+        }
+        
+        .modal-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+        
+        .modal-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            font-weight: 400;
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        /* Основной контейнер */
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            background: var(--dark-bg);
+            overflow: hidden;
+        }
+        
+        /* Боковая панель - УВЕЛИЧЕНА ШИРИНА */
+        .sidebar {
+            width: 420px; /* Увеличено с 350px */
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 10;
+            transition: width 0.3s, background-color 0.3s;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+            cursor: pointer;
+        }
+        
+        .user-info:hover {
+            opacity: 0.9;
+        }
+        
+        .avatar {
+            width: 50px; /* Увеличено */
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .user-avatar {
+            background: var(--primary-gradient);
+        }
+        
+        .avatar-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--accent);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .avatar:hover .avatar-upload {
+            opacity: 1;
+        }
+        
+        .user-info-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .user-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .user-info p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .user-status {
+            font-size: 12px;
+            color: var(--success);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .user-status::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-new-chat, .btn-logout, .btn-settings {
+            width: 42px; /* Увеличено */
+            height: 42px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .btn-new-chat:hover, .btn-logout:hover, .btn-settings:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* Поиск */
+        .search-box {
+            padding: 15px 20px; /* Увеличено */
+            position: relative;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 35px; /* Сдвинуто из-за увеличенной ширины */
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 14px;
+            z-index: 2;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 14px 15px 14px 45px; /* Увеличено */
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 400;
+            transition: all 0.2s;
+        }
+        
+        /* Список чатов - УВЕЛИЧЕН */
+        .chats-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 20px; /* Увеличено */
+        }
+        
+        .chat-item {
+            display: flex;
+            align-items: center;
+            padding: 16px; /* Увеличено */
+            border-radius: 14px;
+            margin-bottom: 8px; /* Увеличено */
+            cursor: pointer;
+            transition: all 0.2s;
+            gap: 15px; /* Добавлен отступ */
+        }
+        
+        .chat-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .chat-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .chat-avatar {
+            width: 54px; /* Увеличено */
+            height: 54px;
+            border-radius: 50%;
+            background: var(--secondary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px; /* Увеличено */
+            margin-right: 0; /* Убрано из-за gap */
+            flex-shrink: 0;
+        }
+        
+        .chat-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px; /* Увеличено */
+        }
+        
+        .chat-header h4 {
+            font-size: 16px; /* Увеличено */
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .chat-time {
+            font-size: 12px; /* Увеличено */
+            color: var(--text-secondary);
+            font-weight: 400;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+        
+        .chat-preview {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chat-preview p {
+            font-size: 14px; /* Увеличено */
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+            margin: 0;
+        }
+        
+        .unread-count {
+            background: var(--accent);
+            color: white;
+            font-size: 11px; /* Увеличено */
+            font-weight: 600;
+            min-width: 20px; /* Увеличено */
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 6px;
+            flex-shrink: 0;
+        }
+        
+        /* Основная область чата */
+        .main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--chat-bg);
+            transition: background 0.3s;
+        }
+        
+        .chat-header {
+            padding: 20px 30px; /* Увеличено */
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-info {
+            display: flex;
+            align-items: center;
+            gap: 16px; /* Увеличено */
+        }
+        
+        .chat-info .avatar {
+            width: 48px; /* Увеличено */
+            height: 48px;
+            background: var(--secondary-gradient);
+        }
+        
+        .chat-info h3 {
+            font-size: 18px; /* Увеличено */
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .chat-status {
+            font-size: 13px; /* Увеличено */
+            color: var(--success);
+            font-weight: 500;
+        }
+        
+        /* Сообщения */
+        .messages-area {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            background: var(--chat-bg);
+            z-index: 1;
+            transition: background 0.3s;
+        }
+        
+        .welcome-icon {
+            width: 100px; /* Увеличено */
+            height: 100px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 42px; /* Увеличено */
+            margin-bottom: 30px; /* Увеличено */
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px; /* Увеличено */
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px; /* Увеличено */
+            height: 100%;
+        }
+        
+        .message {
+            display: flex;
+            max-width: 75%; /* Увеличено */
+            margin-bottom: 5px;
+            animation: messageAppear 0.3s ease-out;
+        }
+        
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message.incoming {
+            align-self: flex-start;
+        }
+        
+        .message.outgoing {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .message-content {
+            background: var(--card-bg);
+            border-radius: 18px; /* Увеличено */
+            padding: 12px 16px; /* Увеличено */
+            position: relative;
+            max-width: 100%;
+            word-wrap: break-word;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .message.outgoing .message-content {
+            background: var(--accent);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: white;
+        }
+        
+        .message-sender {
+            font-size: 12px; /* Увеличено */
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 4px;
+            display: block;
+        }
+        
+        .message-text {
+            font-size: 15px; /* Увеличено */
+            line-height: 1.5;
+            margin-bottom: 4px;
+        }
+        
+        .message-meta {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        
+        .message-time {
+            font-size: 11px; /* Увеличено */
+            color: var(--text-secondary);
+            opacity: 0.9;
+        }
+        
+        /* Ввод сообщения */
+        .message-input-area {
+            padding: 25px 30px; /* Увеличено */
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Увеличено */
+        }
+        
+        .message-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+        
+        .message-input-wrapper input {
+            width: 100%;
+            padding: 16px 50px 16px 25px; /* Увеличено */
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            color: var(--text-primary);
+            font-size: 15px; /* Увеличено */
+            transition: all 0.2s;
+        }
+        
+        .btn-send {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 38px; /* Увеличено */
+            height: 38px;
+            border-radius: 50%;
+            border: none;
+            background: var(--accent);
+            color: white;
+            font-size: 16px; /* Увеличено */
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-send:hover {
+            background: var(--accent-hover);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        /* Формы */
+        .form-group {
+            margin-bottom: 20px; /* Увеличено */
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px; /* Увеличено */
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 14px; /* Увеличено */
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 16px; /* Увеличено */
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 16px; /* Увеличено */
+            transition: all 0.2s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 18px 20px; /* Увеличено */
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px; /* Увеличено */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px; /* Увеличено */
+            margin-top: 8px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Виртуальные номера */
+        .virtual-numbers-section {
+            margin: 20px 0; /* Увеличено */
+            padding: 16px; /* Увеличено */
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .virtual-number-option {
+            display: flex;
+            align-items: center;
+            padding: 12px; /* Увеличено */
+            margin-bottom: 8px; /* Увеличено */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        
+        .virtual-number-option:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--accent);
+        }
+        
+        .virtual-number-option.selected {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: var(--accent);
+        }
+        
+        .number-prefix {
+            font-size: 20px; /* Увеличено */
+            font-weight: 700;
+            min-width: 60px; /* Увеличено */
+        }
+        
+        .number-description {
+            flex: 1;
+            font-size: 13px; /* Увеличено */
+            color: var(--text-secondary);
+        }
+        
+        .number-price {
+            font-size: 14px; /* Увеличено */
+            font-weight: 600;
+            color: var(--success);
+            padding: 4px 12px; /* Увеличено */
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 15px;
+        }
+        
+        .number-price.free {
+            color: var(--accent);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Профиль пользователя */
+        .user-profile {
+            padding: 20px; /* Увеличено */
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .user-numbers {
+            margin-top: 15px; /* Увеличено */
+            display: flex;
+            flex-direction: column;
+            gap: 8px; /* Увеличено */
+        }
+        
+        .user-number {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px; /* Увеличено */
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 8px; /* Увеличено */
+            border: 1px solid var(--border-color);
+        }
+        
+        .number-info {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Увеличено */
+        }
+        
+        .number-type {
+            font-size: 11px; /* Увеличено */
+            padding: 2px 8px; /* Увеличено */
+            border-radius: 10px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+        }
+        
+        .number-type.virtual {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+        
+        .btn-buy-number {
+            padding: 6px 12px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-buy-number:hover {
+            transform: translateY(-1px);
+        }
+        
+        /* Таймер кода */
+        .timer {
+            text-align: center;
+            margin: 20px 0;
+            padding: 16px; /* Увеличено */
+            color: var(--text-secondary);
+            font-size: 14px; /* Увеличено */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Увеличено */
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-resend {
+            width: 100%;
+            padding: 16px; /* Увеличено */
+            background: rgba(30, 41, 59, 0.6);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 16px; /* Увеличено */
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px; /* Увеличено */
+        }
+        
+        .btn-resend:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: var(--accent);
+        }
+        
+        /* Код подтверждения */
+        .code-inputs {
+            display: flex;
+            gap: 12px; /* Увеличено */
+            margin: 15px 0; /* Увеличено */
+            justify-content: center;
+        }
+        
+        .code-digit {
+            width: 55px; /* Увеличено */
+            height: 65px; /* Увеличено */
+            text-align: center;
+            font-size: 24px; /* Увеличено */
+            font-weight: 600;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+        
+        .code-digit:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Поиск пользователей */
+        .search-results {
+            max-height: 250px; /* Увеличено */
+            overflow-y: auto;
+            border-radius: 10px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border-color);
+            margin: 15px 0;
+        }
+        
+        .search-result-item {
+            display: flex;
+            align-items: center;
+            padding: 15px; /* Увеличено */
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .search-result-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .search-result-avatar {
+            width: 45px; /* Увеличено */
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px; /* Увеличено */
+            margin-right: 15px; /* Увеличено */
+            flex-shrink: 0;
+        }
+        
+        .search-result-info {
+            flex: 1;
+        }
+        
+        .search-result-info h4 {
+            font-size: 15px; /* Увеличено */
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .search-result-info p {
+            font-size: 13px; /* Увеличено */
+            color: var(--text-secondary);
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 30px 15px;
+            color: var(--text-secondary);
+            font-size: 14px; /* Увеличено */
+        }
+        
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            width: 40px; /* Увеличено */
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-2px);
+        }
+        
+        /* Статус */
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 12px; /* Увеличено */
+            margin: 30px 0; /* Увеличено */
+            padding: 15px 25px; /* Увеличено */
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .status-indicator {
+            width: 12px; /* Увеличено */
+            height: 12px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+        
+        /* Ввод номера телефона */
+        .phone-input-wrapper {
+            display: flex;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(30, 41, 59, 0.6);
+            transition: all 0.2s;
+        }
+        
+        .phone-input-wrapper:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .country-selector {
+            padding: 16px; /* Увеличено */
+            background: rgba(30, 41, 59, 0.8);
+            color: var(--text-primary);
+            font-weight: 500;
+            border-right: 1px solid var(--border-color);
+            min-width: 65px; /* Увеличено */
+            text-align: center;
+        }
+        
+        .phone-input-wrapper input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            padding: 16px; /* Увеличено */
+            font-size: 16px; /* Увеличено */
+            outline: none;
+            min-width: 0;
+        }
+        
+        .phone-input-wrapper input.valid {
+            border-color: var(--success);
+        }
+        
+        .phone-input-wrapper input.invalid {
+            border-color: var(--danger);
+        }
+        
+        /* Термы */
+        .terms-agreement {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px; /* Увеличено */
+            margin: 20px 0;
+            color: var(--text-secondary);
+            font-size: 14px; /* Увеличено */
+            line-height: 1.4;
+        }
+        
+        .terms-agreement input[type="checkbox"] {
+            margin-top: 3px;
+            accent-color: var(--accent);
+        }
+        
+        .terms-link {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .terms-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Упрощенные модальные окна */
+        .small-modal .modal-body {
+            padding: 25px;
+        }
+        
+        .small-modal .form-group {
+            margin-bottom: 15px;
+        }
+        
+        /* Статистика */
+        .user-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 13px; /* Увеличено */
+            color: var(--text-secondary);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            display: block;
+            font-size: 20px; /* Увеличено */
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+        
+        /* Счетчик символов */
+        .char-counter {
+            text-align: right;
+            font-size: 12px; /* Увеличено */
+            color: var(--text-secondary);
+            margin-top: 6px;
+            height: 16px;
+        }
+        
+        /* Сообщение об ошибке */
+        .error-message {
+            color: var(--danger);
+            font-size: 13px; /* Увеличено */
+            margin-top: 6px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        /* Настройки */
+        .settings-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .settings-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .settings-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .settings-section h3 i {
+            color: var(--accent);
+        }
+        
+        .settings-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+        
+        .theme-option, .bg-option {
+            position: relative;
+            cursor: pointer;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .theme-option:hover, .bg-option:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .theme-option.selected, .bg-option.selected {
+            border-color: var(--accent);
+        }
+        
+        .theme-preview {
+            height: 60px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: flex-end;
+            padding: 8px;
+        }
+        
+        .theme-preview .sidebar-preview {
+            width: 20px;
+            height: 40px;
+            background: var(--preview-sidebar);
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+        
+        .theme-preview .chat-preview {
+            width: 30px;
+            height: 40px;
+            background: var(--preview-chat);
+            border-radius: 4px;
+        }
+        
+        .theme-name {
+            text-align: center;
+            padding: 8px;
+            background: rgba(30, 41, 59, 0.6);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .bg-preview {
+            height: 60px;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .bg-name {
+            text-align: center;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .avatar-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .avatar-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .avatar-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .avatar-option.selected {
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+        
+        .color-picker {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-option.selected {
+            border-color: white;
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .avatar-upload-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            color: var(--accent);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 15px;
+        }
+        
+        .avatar-upload-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .save-settings-btn {
+            margin-top: 25px;
+            padding: 16px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .save-settings-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Информация о пользователе в настройках */
+        .user-info-settings {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .user-info-settings .avatar {
+            width: 70px;
+            height: 70px;
+            font-size: 28px;
+        }
+        
+        .user-info-details {
+            flex: 1;
+        }
+        
+        .user-info-details h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .user-info-details p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        /* Переключатели */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--accent);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-info {
+            flex: 1;
+        }
+        
+        .setting-info h4 {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .setting-info p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body class="auth-visible theme-dark">
+    <!-- Модальное окно авторизации -->
+    <div class="modal" id="authModal">
+        <!-- Шаг 1: Ввод номера телефона -->
+        <div class="modal-content auth-modal" id="phoneStep">
+            <div class="modal-header">
+                <h2>NeoGram</h2>
+                <p class="modal-subtitle">Вход с номером телефона</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="phoneNumber">Номер телефона</label>
+                    <div class="phone-input-wrapper">
+                        <div class="country-selector">+7</div>
+                        <input type="tel" 
+                               id="phoneNumber" 
+                               placeholder="900 123 45 67" 
+                               maxlength="16"
+                               autocomplete="off">
+                    </div>
+                    <div class="char-counter" id="phoneCharCounter">
+                        <span id="phoneCharCount">0</span>/16 символов
+                    </div>
+                    <div class="error-message" id="phoneError">
+                        Номер телефона должен содержать 10 цифр после +7
+                    </div>
+                    <small style="color: var(--text-secondary); display: block; margin-top: 6px; font-size: 11px;">
+                        На этот номер будет отправлен код подтверждения
+                    </small>
+                </div>
+                
+                <div class="terms-agreement">
+                    <input type="checkbox" id="termsAgreement">
+                    <label for="termsAgreement">
+                        Я соглашаюсь с <a href="#" class="terms-link">Условиями</a>
+                    </label>
+                </div>
+                
+                <button class="btn-primary" id="sendCodeBtn" disabled>
+                    <span>Получить код</span>
+                    <i class="fas fa-sms"></i>
+                </button>
+                
+                <div style="text-align: center; margin-top: 15px; color: var(--text-secondary); font-size: 12px;">
+                    Или <a href="#" id="useVirtualNumberLink" style="color: var(--accent);">войти с виртуальным номером</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Шаг 2: Ввод кода подтверждения -->
+        <div class="modal-content auth-modal hidden" id="codeStep">
+            <div class="modal-header">
+                <div class="back-btn" id="backToPhone">
+                    <i class="fas fa-arrow-left"></i>
+                </div>
+                <h2>Подтверждение</h2>
+                <p class="modal-subtitle" id="codeSentTo">Код отправлен на +7 900 123 45 67</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label style="text-align: center; display: block;">Введите код из СМС</label>
+                    <div class="code-inputs">
+                        <input type="text" class="code-digit" maxlength="1" data-index="0">
+                        <input type="text" class="code-digit" maxlength="1" data-index="1">
+                        <input type="text" class="code-digit" maxlength="1" data-index="2">
+                        <input type="text" class="code-digit" maxlength="1" data-index="3">
+                        <input type="text" class="code-digit" maxlength="1" data-index="4">
+                    </div>
+                </div>
+                
+                <div class="timer" id="resendTimer">
+                    <i class="fas fa-clock"></i>
+                    <span id="timerText">01:00</span>
+                </div>
+                
+                <button class="btn-resend hidden" id="resendCodeBtn">
+                    <i class="fas fa-redo"></i> Отправить код повторно
+                </button>
+                
+                <button class="btn-primary" id="verifyCodeBtn" disabled>
+                    <span>Подтвердить</span>
+                    <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Шаг 3: Выбор виртуального номера -->
+        <div class="modal-content auth-modal hidden" id="virtualNumberStep">
+            <div class="modal-header">
+                <div class="back-btn" id="backToAuth">
+                    <i class="fas fa-arrow-left"></i>
+                </div>
+                <h2>Виртуальный номер</h2>
+                <p class="modal-subtitle">Выберите виртуальный номер</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="virtualUsername">Ваш юзернейм</label>
+                    <input type="text" id="virtualUsername" placeholder="например, alex" maxlength="20">
+                </div>
+                
+                <div class="virtual-numbers-section">
+                    <div class="virtual-number-option selected" data-prefix="+888">
+                        <div class="number-prefix" style="color: #10b981;">+888</div>
+                        <div class="number-description">
+                            <strong>Базовый номер</strong><br>
+                            Бесплатно, основные функции
+                        </div>
+                        <div class="number-price free">БЕСПЛАТНО</div>
+                    </div>
+                    
+                    <div class="virtual-number-option" data-prefix="+999">
+                        <div class="number-prefix" style="color: #f59e0b;">+999</div>
+                        <div class="number-description">
+                            <strong>Премиум номер</strong><br>
+                            299 ₽/мес
+                        </div>
+                        <div class="number-price">299 ₽/мес</div>
+                    </div>
+                </div>
+                
+                <button class="btn-primary" id="useVirtualNumberBtn" disabled>
+                    <span>Продолжить</span>
+                    <i class="fas fa-mobile-alt"></i>
+                </button>
+                
+                <div style="text-align: center; margin-top: 15px; color: var(--text-secondary); font-size: 12px;">
+                    Или <a href="#" id="useRealNumberLink" style="color: var(--accent);">войти с реальным номером</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Шаг 4: Создание профиля -->
+        <div class="modal-content auth-modal hidden" id="profileStep">
+            <div class="modal-header">
+                <div class="back-btn" id="backToVirtual">
+                    <i class="fas fa-arrow-left"></i>
+                </div>
+                <h2>Профиль</h2>
+                <p class="modal-subtitle">Завершите настройку профиля</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="profileName">Ваше имя</label>
+                    <input type="text" id="profileName" placeholder="Александр">
+                </div>
+                
+                <div class="user-number" style="margin: 15px 0; font-size: 14px;">
+                    <div class="number-info">
+                        <span id="profileNumber" style="font-weight: 500;">+888 XXX XXX XXX</span>
+                        <span class="number-type" id="profileNumberType">ВИРТУАЛЬНЫЙ</span>
+                    </div>
+                </div>
+                
+                <button class="btn-primary" id="completeProfileBtn">
+                    <span>Завершить регистрацию</span>
+                    <i class="fas fa-rocket"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Основной интерфейс -->
+    <div class="container hidden" id="mainApp">
+        <div class="sidebar">
+            <div class="user-profile">
+                <div class="user-info" id="openSettings">
+                    <div class="avatar user-avatar" id="userAvatar">
+                        <i class="fas fa-user" id="userAvatarIcon"></i>
+                        <div class="avatar-upload">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <div class="user-info-content">
+                        <h3 id="userDisplayName">Александр</h3>
+                        <p id="userUsername">@username</p>
+                        <span class="user-status" id="userStatus">online</span>
+                    </div>
+                </div>
+                
+                <div class="user-numbers" id="userNumbers">
+                    <!-- Номера будут здесь -->
+                </div>
+            </div>
+            
+            <div class="sidebar-header">
+                <div class="header-actions">
+                    <button class="btn-new-chat" id="newChatBtn" title="Новый чат">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="btn-settings" id="settingsBtn" title="Настройки">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button class="btn-logout" id="logoutBtn" title="Выйти">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Поиск чатов..." id="searchInput">
+            </div>
+            
+            <div class="chats-list" id="chatsList">
+                <!-- Чаты будут здесь -->
+            </div>
+            
+            <div style="padding: 15px; border-top: 1px solid var(--border-color);">
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="chatsCount">0</span>
+                        <span>чатов</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="onlineCount">1</span>
+                        <span>онлайн</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="numbersCount">1</span>
+                        <span>номеров</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-chat" id="mainChatArea">
+            <div class="chat-header">
+                <div class="chat-info">
+                    <div class="avatar" id="currentChatAvatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h3 id="chatTitle">Выберите чат</h3>
+                        <span class="chat-status" id="chatStatus">...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="messages-area" id="messagesArea">
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h2>Добро пожаловать!</h2>
+                    <p id="welcomeMessage">Выберите чат из списка слева</p>
+                    
+                    <div class="connection-status">
+                        <div class="status-indicator"></div>
+                        <span id="statusText">Подключено</span>
+                    </div>
+                    
+                    <button class="btn-primary" id="buyNumberBtn" style="margin-top: 20px; width: auto; padding: 12px 24px; font-size: 14px;">
+                        <i class="fas fa-plus-circle"></i> Купить виртуальный номер
+                    </button>
+                </div>
+                
+                <div class="chat-messages hidden" id="chatMessages">
+                    <!-- Сообщения будут здесь -->
+                </div>
+            </div>
+            
+            <div class="message-input-area hidden" id="messageInputArea">
+                <div class="message-input-wrapper">
+                    <input type="text" 
+                           placeholder="Напишите сообщение..." 
+                           id="messageInput"
+                           disabled>
+                    <button class="btn-send" id="sendButton" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // NeoGram - Улучшенная версия с настройками
+        class NeoGram {
+            constructor() {
+                this.user = null;
+                this.chats = [];
+                this.currentChatId = null;
+                this.messages = {};
+                this.usersDatabase = {};
+                this.timerInterval = null;
+                this.timeLeft = 60;
+                this.currentStep = 'phone';
+                this.settings = {
+                    theme: 'theme-dark',
+                    chatBackground: 'chat-bg-default',
+                    avatar: 'default',
+                    avatarColor: '#667eea',
+                    notifications: true,
+                    sound: true
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.loadSettings();
+                this.initVirtualNumbers();
+                this.initDatabase();
+                this.cacheElements();
+                this.bindEvents();
+                this.setupPhoneInput();
+                this.setupCodeInputs();
+                
+                this.checkSavedSession();
+            }
+            
+            loadSettings() {
+                try {
+                    const savedSettings = localStorage.getItem('neogram_settings');
+                    if (savedSettings) {
+                        this.settings = JSON.parse(savedSettings);
+                        this.applySettings();
+                    }
+                } catch (e) {
+                    console.error('Error loading settings:', e);
+                }
+            }
+            
+            saveSettings() {
+                localStorage.setItem('neogram_settings', JSON.stringify(this.settings));
+            }
+            
+            applySettings() {
+                // Применяем тему
+                document.body.className = document.body.className.replace(/theme-\w+/g, '');
+                document.body.classList.add(this.settings.theme);
+                
+                // Применяем фон чата
+                const mainChatArea = document.getElementById('mainChatArea');
+                if (mainChatArea) {
+                    mainChatArea.className = 'main-chat';
+                    mainChatArea.classList.add(this.settings.chatBackground);
+                }
+                
+                // Применяем цвет аватарки
+                if (this.user) {
+                    this.updateUserAvatar();
+                }
+            }
+            
+            checkSavedSession() {
+                try {
+                    const sessionData = localStorage.getItem('neogram_session');
+                    
+                    if (sessionData) {
+                        const session = JSON.parse(sessionData);
+                        const sessionAge = Date.now() - session.lastActivity;
+                        const MAX_SESSION_AGE = 7 * 24 * 60 * 60 * 1000;
+                        
+                        if (sessionAge < MAX_SESSION_AGE) {
+                            const userKey = session.userKey;
+                            const userData = localStorage.getItem(`neogram_user_${userKey}`);
+                            
+                            if (userData) {
+                                this.user = JSON.parse(userData);
+                                session.lastActivity = Date.now();
+                                localStorage.setItem('neogram_session', JSON.stringify(session));
+                                
+                                this.showMainInterface();
+                                this.loadChats();
+                                return;
+                            }
+                        } else {
+                            localStorage.removeItem('neogram_session');
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error checking session:', e);
+                }
+                
+                this.showAuth();
+            }
+            
+            saveSession() {
+                if (!this.user) return;
+                
+                const session = {
+                    userKey: this.user.type === 'virtual' ? this.user.phone.replace(/\s/g, '') : this.user.phone,
+                    lastActivity: Date.now(),
+                    createdAt: Date.now()
+                };
+                
+                localStorage.setItem('neogram_session', JSON.stringify(session));
+            }
+            
+            initVirtualNumbers() {
+                this.virtualNumbers = {
+                    '+888': {
+                        name: 'Базовый виртуальный номер',
+                        type: 'virtual',
+                        price: 0,
+                        color: '#10b981',
+                        features: ['Бесплатно', 'Основные функции'],
+                        status: 'free'
+                    },
+                    '+999': {
+                        name: 'Премиум виртуальный номер',
+                        type: 'virtual',
+                        price: 299,
+                        color: '#f59e0b',
+                        features: ['299 ₽/мес', 'Голосовые сообщения'],
+                        status: 'premium'
+                    }
+                };
+            }
+            
+            initDatabase() {
+                this.usersDatabase = {};
+                this.loadUsersFromStorage();
+            }
+            
+            loadUsersFromStorage() {
+                try {
+                    const usersData = localStorage.getItem('neogram_users');
+                    if (usersData) {
+                        this.usersDatabase = JSON.parse(usersData);
+                    }
+                } catch (e) {
+                    console.error('Error loading users:', e);
+                }
+            }
+            
+            cacheElements() {
+                // Auth elements
+                this.phoneStep = document.getElementById('phoneStep');
+                this.codeStep = document.getElementById('codeStep');
+                this.virtualNumberStep = document.getElementById('virtualNumberStep');
+                this.profileStep = document.getElementById('profileStep');
+                this.phoneNumber = document.getElementById('phoneNumber');
+                this.codeDigits = document.querySelectorAll('.code-digit');
+                this.verifyCodeBtn = document.getElementById('verifyCodeBtn');
+                this.sendCodeBtn = document.getElementById('sendCodeBtn');
+                this.resendCodeBtn = document.getElementById('resendCodeBtn');
+                this.resendTimer = document.getElementById('resendTimer');
+                this.timerText = document.getElementById('timerText');
+                this.phoneCharCounter = document.getElementById('phoneCharCounter');
+                this.phoneCharCount = document.getElementById('phoneCharCount');
+                this.phoneError = document.getElementById('phoneError');
+                
+                // Links
+                this.useVirtualNumberLink = document.getElementById('useVirtualNumberLink');
+                this.useRealNumberLink = document.getElementById('useRealNumberLink');
+                
+                // Virtual number elements
+                this.virtualUsername = document.getElementById('virtualUsername');
+                this.useVirtualNumberBtn = document.getElementById('useVirtualNumberBtn');
+                this.virtualNumberOptions = document.querySelectorAll('.virtual-number-option');
+                
+                // Profile elements
+                this.profileName = document.getElementById('profileName');
+                this.profileNumber = document.getElementById('profileNumber');
+                this.profileNumberType = document.getElementById('profileNumberType');
+                this.completeProfileBtn = document.getElementById('completeProfileBtn');
+                
+                // Back buttons
+                this.backToPhone = document.getElementById('backToPhone');
+                this.backToAuth = document.getElementById('backToAuth');
+                this.backToVirtual = document.getElementById('backToVirtual');
+                
+                // Main interface
+                this.mainApp = document.getElementById('mainApp');
+                this.authModal = document.getElementById('authModal');
+                this.logoutBtn = document.getElementById('logoutBtn');
+                this.newChatBtn = document.getElementById('newChatBtn');
+                this.buyNumberBtn = document.getElementById('buyNumberBtn');
+                this.settingsBtn = document.getElementById('settingsBtn');
+                this.openSettingsBtn = document.getElementById('openSettings');
+                
+                // User info
+                this.userDisplayName = document.getElementById('userDisplayName');
+                this.userUsername = document.getElementById('userUsername');
+                this.userAvatar = document.getElementById('userAvatar');
+                this.userAvatarIcon = document.getElementById('userAvatarIcon');
+                this.userStatus = document.getElementById('userStatus');
+                this.userNumbers = document.getElementById('userNumbers');
+                this.onlineCount = document.getElementById('onlineCount');
+                this.chatsCount = document.getElementById('chatsCount');
+                this.numbersCount = document.getElementById('numbersCount');
+                this.welcomeMessage = document.getElementById('welcomeMessage');
+                this.statusText = document.getElementById('statusText');
+                
+                // Chats
+                this.chatsList = document.getElementById('chatsList');
+                this.searchInput = document.getElementById('searchInput');
+                
+                // Messages
+                this.welcomeScreen = document.getElementById('welcomeScreen');
+                this.chatMessages = document.getElementById('chatMessages');
+                this.messageInputArea = document.getElementById('messageInputArea');
+                this.messageInput = document.getElementById('messageInput');
+                this.sendButton = document.getElementById('sendButton');
+                this.chatTitle = document.getElementById('chatTitle');
+                this.chatStatus = document.getElementById('chatStatus');
+                this.currentChatAvatar = document.getElementById('currentChatAvatar');
+                
+                // Main chat area
+                this.mainChatArea = document.getElementById('mainChatArea');
+            }
+            
+            bindEvents() {
+                // Auth events
+                this.sendCodeBtn.addEventListener('click', () => this.sendCode());
+                this.useVirtualNumberLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.goToStep('virtual');
+                });
+                this.useRealNumberLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.goToStep('phone');
+                });
+                
+                // Code verification
+                this.verifyCodeBtn.addEventListener('click', () => this.verifyCode());
+                this.resendCodeBtn.addEventListener('click', () => this.resendCode());
+                
+                // Back buttons
+                this.backToPhone.addEventListener('click', () => this.goToStep('phone'));
+                this.backToAuth.addEventListener('click', () => this.goToStep('virtual'));
+                this.backToVirtual.addEventListener('click', () => {
+                    if (this.user && this.user.type === 'virtual') {
+                        this.goToStep('virtual');
+                    } else {
+                        this.goToStep('phone');
+                    }
+                });
+                
+                // Virtual number selection
+                this.virtualNumberOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        this.virtualNumberOptions.forEach(o => o.classList.remove('selected'));
+                        option.classList.add('selected');
+                        this.selectedVirtualNumber = option.dataset.prefix;
+                        this.checkVirtualNumberForm();
+                    });
+                });
+                
+                this.virtualUsername.addEventListener('input', () => this.checkVirtualNumberForm());
+                this.useVirtualNumberBtn.addEventListener('click', () => this.useVirtualNumber());
+                this.completeProfileBtn.addEventListener('click', () => this.completeProfile());
+                
+                // Main interface
+                this.logoutBtn.addEventListener('click', () => this.logout());
+                this.newChatBtn.addEventListener('click', () => this.openNewChatModal());
+                this.buyNumberBtn.addEventListener('click', () => this.openBuyNumberModal());
+                this.settingsBtn.addEventListener('click', () => this.openSettingsModal());
+                this.openSettingsBtn.addEventListener('click', () => this.openSettingsModal());
+                
+                // Messages
+                this.sendButton.addEventListener('click', () => this.sendMessage());
+                this.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.sendMessage();
+                });
+                
+                // Search
+                this.searchInput.addEventListener('input', () => this.filterChats());
+                
+                // Terms agreement
+                document.getElementById('termsAgreement').addEventListener('change', () => {
+                    this.checkPhoneForm();
+                });
+                
+                // Initialize virtual number selection
+                this.selectedVirtualNumber = '+888';
+            }
+            
+            setupPhoneInput() {
+                this.phoneNumber.addEventListener('input', (e) => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    
+                    this.phoneCharCount.textContent = e.target.value.length;
+                    
+                    if (value.length > 0) {
+                        value = value.substring(0, 10);
+                        
+                        let formatted = '';
+                        if (value.length > 0) formatted = value.substring(0, 3);
+                        if (value.length > 3) formatted = value.substring(0, 3) + ' ' + value.substring(3, 6);
+                        if (value.length > 6) formatted = value.substring(0, 3) + ' ' + value.substring(3, 6) + ' ' + value.substring(6, 8);
+                        if (value.length > 8) formatted = value.substring(0, 3) + ' ' + value.substring(3, 6) + ' ' + value.substring(6, 8) + ' ' + value.substring(8, 10);
+                        
+                        e.target.value = formatted;
+                    } else {
+                        e.target.value = '';
+                    }
+                    
+                    this.checkPhoneForm();
+                });
+                
+                this.checkPhoneForm();
+            }
+            
+            checkPhoneForm() {
+                const phone = this.phoneNumber.value.replace(/\D/g, '');
+                const terms = document.getElementById('termsAgreement').checked;
+                
+                if (phone.length === 10 && terms) {
+                    this.sendCodeBtn.disabled = false;
+                    this.phoneError.classList.remove('show');
+                } else {
+                    this.sendCodeBtn.disabled = true;
+                    if (this.phoneNumber.value.length > 0 && phone.length !== 10) {
+                        this.phoneError.classList.add('show');
+                    } else {
+                        this.phoneError.classList.remove('show');
+                    }
+                }
+            }
+            
+            checkVirtualNumberForm() {
+                const username = this.virtualUsername.value.trim();
+                if (username.length >= 3 && /^[a-zA-Z0-9_]+$/.test(username)) {
+                    this.useVirtualNumberBtn.disabled = false;
+                } else {
+                    this.useVirtualNumberBtn.disabled = true;
+                }
+            }
+            
+            setupCodeInputs() {
+                this.codeDigits.forEach((digit, index) => {
+                    digit.addEventListener('input', (e) => this.handleCodeInput(e, index));
+                    digit.addEventListener('keydown', (e) => this.handleCodeNavigation(e, index));
+                });
+            }
+            
+            handleCodeInput(e, index) {
+                const value = e.target.value;
+                if (!/^\d?$/.test(value)) {
+                    e.target.value = '';
+                    return;
+                }
+                
+                if (value && index < this.codeDigits.length - 1) {
+                    this.codeDigits[index + 1].focus();
+                }
+                
+                this.checkCodeComplete();
+            }
+            
+            handleCodeNavigation(e, index) {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    e.preventDefault();
+                    this.codeDigits[index - 1].focus();
+                    this.codeDigits[index - 1].value = '';
+                } else if (e.key === 'ArrowLeft' && index > 0) {
+                    this.codeDigits[index - 1].focus();
+                } else if (e.key === 'ArrowRight' && index < this.codeDigits.length - 1) {
+                    this.codeDigits[index + 1].focus();
+                }
+                
+                this.checkCodeComplete();
+            }
+            
+            checkCodeComplete() {
+                let complete = true;
+                this.codeDigits.forEach(digit => {
+                    if (!digit.value) complete = false;
+                });
+                
+                this.verifyCodeBtn.disabled = !complete;
+                return complete;
+            }
+            
+            showAuth() {
+                document.body.className = 'auth-visible ' + this.settings.theme;
+                this.goToStep('phone');
+            }
+            
+            goToStep(step) {
+                this.currentStep = step;
+                
+                this.phoneStep.classList.add('hidden');
+                this.codeStep.classList.add('hidden');
+                this.virtualNumberStep.classList.add('hidden');
+                this.profileStep.classList.add('hidden');
+                
+                switch(step) {
+                    case 'phone':
+                        this.phoneStep.classList.remove('hidden');
+                        this.phoneNumber.focus();
+                        break;
+                    case 'code':
+                        this.codeStep.classList.remove('hidden');
+                        this.codeDigits[0]?.focus();
+                        this.startTimer();
+                        break;
+                    case 'virtual':
+                        this.virtualNumberStep.classList.remove('hidden');
+                        this.virtualUsername.focus();
+                        break;
+                    case 'profile':
+                        this.profileStep.classList.remove('hidden');
+                        this.profileName.focus();
+                        break;
+                }
+            }
+            
+            startTimer() {
+                this.timeLeft = 60;
+                this.resendTimer.classList.remove('hidden');
+                this.resendCodeBtn.classList.add('hidden');
+                
+                if (this.timerInterval) {
+                    clearInterval(this.timerInterval);
+                }
+                
+                this.updateTimerDisplay();
+                
+                this.timerInterval = setInterval(() => {
+                    this.timeLeft--;
+                    this.updateTimerDisplay();
+                    
+                    if (this.timeLeft <= 0) {
+                        clearInterval(this.timerInterval);
+                        this.resendTimer.classList.add('hidden');
+                        this.resendCodeBtn.classList.remove('hidden');
+                    }
+                }, 1000);
+            }
+            
+            updateTimerDisplay() {
+                const minutes = Math.floor(this.timeLeft / 60);
+                const seconds = this.timeLeft % 60;
+                this.timerText.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            sendCode() {
+                const phone = this.phoneNumber.value.trim();
+                const terms = document.getElementById('termsAgreement').checked;
+                
+                if (!terms) {
+                    alert('Пожалуйста, согласитесь с условиями использования');
+                    return;
+                }
+                
+                if (phone.replace(/\D/g, '').length !== 10) {
+                    alert('Пожалуйста, введите корректный номер телефона (10 цифр)');
+                    return;
+                }
+                
+                const formattedPhone = this.formatPhone(phone);
+                document.getElementById('codeSentTo').textContent = `Код отправлен на ${formattedPhone}`;
+                
+                this.goToStep('code');
+                
+                setTimeout(() => {
+                    const code = '12345';
+                    this.codeDigits.forEach((digit, index) => {
+                        digit.value = code[index] || '';
+                    });
+                    this.checkCodeComplete();
+                }, 800);
+            }
+            
+            formatPhone(phone) {
+                const clean = phone.replace(/\D/g, '');
+                return `+7 (${clean.substring(0,3)}) ${clean.substring(3,6)}-${clean.substring(6,8)}-${clean.substring(8,10)}`;
+            }
+            
+            verifyCode() {
+                if (!this.checkCodeComplete()) {
+                    alert('Пожалуйста, введите полный код');
+                    return;
+                }
+                
+                const phone = '+7' + this.phoneNumber.value.replace(/\D/g, '');
+                const username = `user_${Date.now().toString().slice(-6)}`;
+                
+                const existingUser = this.usersDatabase[phone] || localStorage.getItem(`neogram_user_${phone}`);
+                
+                if (existingUser && typeof existingUser === 'string') {
+                    this.user = JSON.parse(existingUser);
+                } else if (existingUser) {
+                    this.user = existingUser;
+                } else {
+                    this.user = {
+                        id: Date.now(),
+                        phone: phone,
+                        username: username,
+                        name: 'Пользователь',
+                        displayName: 'Пользователь',
+                        type: 'real',
+                        status: 'online',
+                        avatar: this.settings.avatar,
+                        avatarColor: this.settings.avatarColor,
+                        numbers: [{
+                            phone: phone,
+                            type: 'real',
+                            isDefault: true
+                        }],
+                        settings: {...this.settings},
+                        createdAt: new Date().toISOString(),
+                        lastActivity: Date.now()
+                    };
+                    
+                    this.user.numbers.push({
+                        phone: this.generateVirtualNumber('+888'),
+                        type: 'virtual',
+                        virtualType: '+888',
+                        isDefault: false,
+                        purchasedAt: new Date().toISOString()
+                    });
+                }
+                
+                this.saveUser();
+                this.saveSession();
+                
+                this.showMainInterface();
+                this.loadChats();
+            }
+            
+            useVirtualNumber() {
+                const username = this.virtualUsername.value.trim();
+                
+                if (!username) {
+                    alert('Пожалуйста, введите юзернейм');
+                    return;
+                }
+                
+                if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
+                    alert('Юзернейм должен содержать 3-20 символов (только буквы, цифры и подчеркивания)');
+                    return;
+                }
+                
+                const virtualNumber = this.generateVirtualNumber(this.selectedVirtualNumber);
+                this.profileNumber.textContent = virtualNumber;
+                this.profileNumberType.textContent = 'ВИРТУАЛЬНЫЙ';
+                
+                this.user = {
+                    id: Date.now(),
+                    phone: virtualNumber,
+                    username: username,
+                    name: '',
+                    displayName: '',
+                    type: 'virtual',
+                    virtualType: this.selectedVirtualNumber,
+                    status: 'online',
+                    avatar: this.settings.avatar,
+                    avatarColor: this.settings.avatarColor,
+                    numbers: [{
+                        phone: virtualNumber,
+                        type: 'virtual',
+                        virtualType: this.selectedVirtualNumber,
+                        isDefault: true,
+                        purchasedAt: new Date().toISOString()
+                    }],
+                    settings: {...this.settings},
+                    createdAt: new Date().toISOString(),
+                    lastActivity: Date.now()
+                };
+                
+                this.goToStep('profile');
+            }
+            
+            generateVirtualNumber(prefix) {
+                const middle = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                const end = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                return `${prefix} ${middle} ${end}`;
+            }
+            
+            completeProfile() {
+                const name = this.profileName.value.trim();
+                
+                if (!name) {
+                    alert('Пожалуйста, введите ваше имя');
+                    return;
+                }
+                
+                this.user.name = name;
+                this.user.displayName = name;
+                
+                this.saveUser();
+                this.saveSession();
+                
+                this.showMainInterface();
+                this.loadChats();
+            }
+            
+            showMainInterface() {
+                document.body.className = 'app-visible ' + this.settings.theme;
+                
+                if (this.user) {
+                    this.userDisplayName.textContent = this.user.displayName || this.user.name;
+                    this.userUsername.textContent = `@${this.user.username}`;
+                    this.updateUserAvatar();
+                    this.userStatus.textContent = 'online';
+                    
+                    this.welcomeMessage.textContent = `Добро пожаловать, ${this.user.displayName || this.user.name}!`;
+                    this.statusText.textContent = this.user.type === 'virtual' 
+                        ? 'Виртуальный номер активен' 
+                        : 'Реальный номер подтверждён';
+                    
+                    this.updateUserNumbers();
+                    this.updateStats();
+                    this.applySettings();
+                }
+            }
+            
+            updateUserAvatar() {
+                if (!this.user) return;
+                
+                const avatarElement = this.userAvatar;
+                const avatarIcon = this.userAvatarIcon;
+                
+                if (this.user.avatar && this.user.avatar !== 'default') {
+                    avatarElement.style.backgroundImage = `url('${this.user.avatar}')`;
+                    avatarElement.style.backgroundColor = 'transparent';
+                    avatarIcon.style.display = 'none';
+                } else {
+                    avatarElement.style.backgroundImage = 'none';
+                    avatarElement.style.backgroundColor = this.user.avatarColor || this.settings.avatarColor;
+                    avatarIcon.style.display = 'flex';
+                    avatarIcon.className = this.getAvatarIcon(this.user.avatar || 'default');
+                }
+            }
+            
+            getAvatarIcon(avatarType) {
+                const icons = {
+                    'default': 'fas fa-user',
+                    'cat': 'fas fa-cat',
+                    'dog': 'fas fa-dog',
+                    'robot': 'fas fa-robot',
+                    'game': 'fas fa-gamepad',
+                    'music': 'fas fa-music',
+                    'code': 'fas fa-code',
+                    'camera': 'fas fa-camera'
+                };
+                return icons[avatarType] || 'fas fa-user';
+            }
+            
+            updateUserNumbers() {
+                if (!this.user) return;
+                
+                this.userNumbers.innerHTML = '';
+                
+                this.user.numbers.forEach((number, index) => {
+                    const numberElement = document.createElement('div');
+                    numberElement.className = 'user-number';
+                    
+                    const numberInfo = document.createElement('div');
+                    numberInfo.className = 'number-info';
+                    
+                    const numberType = number.type === 'virtual' ? 'ВИРТУАЛЬНЫЙ' : 'РЕАЛЬНЫЙ';
+                    const typeClass = number.type === 'virtual' ? 'virtual' : '';
+                    const numberColor = number.type === 'virtual' 
+                        ? (this.virtualNumbers[number.virtualType]?.color || '#10b981') 
+                        : '#3b82f6';
+                    
+                    numberInfo.innerHTML = `
+                        <span style="font-size: 13px; font-weight: 500;">${number.phone}</span>
+                        <span class="number-type ${typeClass}" style="background: ${numberColor}20; color: ${numberColor}; font-size: 9px;">${numberType}</span>
+                    `;
+                    
+                    numberElement.appendChild(numberInfo);
+                    
+                    if (number.isDefault) {
+                        const defaultBadge = document.createElement('span');
+                        defaultBadge.className = 'number-type';
+                        defaultBadge.textContent = 'ПО УМОЛЧАНИЮ';
+                        defaultBadge.style.background = 'rgba(59, 130, 246, 0.1)';
+                        defaultBadge.style.color = 'var(--accent)';
+                        defaultBadge.style.fontSize = '9px';
+                        numberInfo.appendChild(defaultBadge);
+                    }
+                    
+                    this.userNumbers.appendChild(numberElement);
+                });
+            }
+            
+            updateStats() {
+                if (!this.user) return;
+                
+                this.chatsCount.textContent = this.chats.length;
+                this.numbersCount.textContent = this.user.numbers.length;
+                
+                const onlineUsers = Object.values(this.usersDatabase).filter(u => u.status === 'online').length;
+                this.onlineCount.textContent = Math.max(1, onlineUsers);
+            }
+            
+            saveUser() {
+                if (!this.user) return;
+                
+                const userKey = this.user.type === 'virtual' ? this.user.phone.replace(/\s/g, '') : this.user.phone;
+                
+                this.user.lastActivity = Date.now();
+                this.user.settings = {...this.settings};
+                
+                localStorage.setItem(`neogram_user_${userKey}`, JSON.stringify(this.user));
+                
+                this.usersDatabase[userKey] = this.user;
+                localStorage.setItem('neogram_users', JSON.stringify(this.usersDatabase));
+            }
+            
+            loadChats() {
+                try {
+                    if (!this.user) return;
+                    
+                    const userKey = this.user.type === 'virtual' ? this.user.phone.replace(/\s/g, '') : this.user.phone;
+                    const savedChats = localStorage.getItem(`neogram_chats_${userKey}`);
+                    const savedMessages = localStorage.getItem(`neogram_messages_${userKey}`);
+                    
+                    if (savedChats) {
+                        this.chats = JSON.parse(savedChats);
+                    }
+                    
+                    if (savedMessages) {
+                        this.messages = JSON.parse(savedMessages);
+                    }
+                    
+                    if (this.chats.length === 0) {
+                        this.createDemoChats();
+                    }
+                    
+                    this.renderChatsList();
+                    this.updateStats();
+                    
+                } catch (e) {
+                    console.error('Error loading chats:', e);
+                    this.chats = [];
+                    this.messages = {};
+                    this.createDemoChats();
+                    this.renderChatsList();
+                }
+            }
+            
+            createDemoChats() {
+                if (!this.user) return;
+                
+                const demoUsers = [
+                    {
+                        id: 1,
+                        phone: '+888 111 222 333',
+                        username: 'support',
+                        name: 'Поддержка NeoGram',
+                        type: 'virtual',
+                        virtualType: '+888',
+                        color: '#fa709a',
+                        avatar: 'default',
+                        avatarColor: '#fa709a'
+                    },
+                    {
+                        id: 2,
+                        phone: '+999 444 555 666',
+                        username: 'premium_user',
+                        name: 'Премиум Пользователь',
+                        type: 'virtual',
+                        virtualType: '+999',
+                        color: '#f59e0b',
+                        avatar: 'default',
+                        avatarColor: '#f59e0b'
+                    },
+                    {
+                        id: 3,
+                        phone: '+7 900 987 65 43',
+                        username: 'real_user',
+                        name: 'Реальный Пользователь',
+                        type: 'real',
+                        color: '#667eea',
+                        avatar: 'default',
+                        avatarColor: '#667eea'
+                    }
+                ];
+                
+                demoUsers.forEach(user => {
+                    const key = user.type === 'virtual' ? user.phone.replace(/\s/g, '') : user.phone;
+                    if (!this.usersDatabase[key]) {
+                        this.usersDatabase[key] = {
+                            ...user,
+                            status: 'online',
+                            createdAt: new Date().toISOString()
+                        };
+                    }
+                });
+                
+                this.chats = demoUsers.map((user, index) => {
+                    const chatId = `chat_${Date.now()}_${index}`;
+                    const messages = [
+                        index === 0 ? 'Добро пожаловать в NeoGram!' :
+                        index === 1 ? 'Привет! Я использую премиум номер' :
+                        'Здравствуйте! Рад знакомству'
+                    ];
+                    
+                    return {
+                        id: chatId,
+                        name: user.name,
+                        type: 'private',
+                        userId: user.id,
+                        userPhone: user.phone,
+                        userType: user.type,
+                        color: user.color,
+                        lastMessage: messages[0],
+                        lastMessageTime: new Date(Date.now() - (index + 1) * 3600000).toISOString(),
+                        unreadCount: index === 0 ? 1 : 0
+                    };
+                });
+                
+                this.messages = {};
+                this.chats.forEach((chat, index) => {
+                    const otherUser = demoUsers[index];
+                    this.messages[chat.id] = [
+                        {
+                            id: `msg_${Date.now()}_${index}_1`,
+                            text: chat.lastMessage,
+                            sender: otherUser.username,
+                            timestamp: chat.lastMessageTime,
+                            phone: otherUser.phone,
+                            type: otherUser.type
+                        }
+                    ];
+                    
+                    if (index === 0) {
+                        this.messages[chat.id].push({
+                            id: `msg_${Date.now()}_${index}_2`,
+                            text: 'Спасибо! Рад быть здесь',
+                            sender: this.user.username,
+                            timestamp: new Date(Date.now() - 3500000).toISOString(),
+                            phone: this.user.phone,
+                            type: this.user.type
+                        });
+                    }
+                });
+                
+                this.saveChats();
+                this.saveMessages();
+                this.saveUsersDatabase();
+            }
+            
+            renderChatsList() {
+                this.chatsList.innerHTML = '';
+                
+                this.chats.forEach(chat => {
+                    const chatElement = document.createElement('div');
+                    chatElement.className = 'chat-item';
+                    chatElement.dataset.chatId = chat.id;
+                    
+                    const time = new Date(chat.lastMessageTime).toLocaleTimeString('ru-RU', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    
+                    chatElement.innerHTML = `
+                        <div class="chat-avatar" style="background: ${chat.color}">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <h4>${chat.name}</h4>
+                                <span class="chat-time">${time}</span>
+                            </div>
+                            <div class="chat-preview">
+                                <p>${this.truncateText(chat.lastMessage, 30)}</p>
+                                ${chat.unreadCount > 0 ? `<span class="unread-count">${chat.unreadCount}</span>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    
+                    chatElement.addEventListener('click', () => this.selectChat(chat.id));
+                    this.chatsList.appendChild(chatElement);
+                });
+            }
+            
+            selectChat(chatId) {
+                const chat = this.chats.find(c => c.id === chatId);
+                if (!chat) return;
+                
+                document.querySelectorAll('.chat-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                const selectedChat = document.querySelector(`.chat-item[data-chat-id="${chatId}"]`);
+                if (selectedChat) {
+                    selectedChat.classList.add('active');
+                }
+                
+                this.currentChatId = chatId;
+                this.chatTitle.textContent = `${chat.name}`;
+                this.chatStatus.textContent = 'в сети';
+                
+                this.currentChatAvatar.style.background = chat.color;
+                this.currentChatAvatar.innerHTML = `<i class="fas fa-user"></i>`;
+                
+                this.showChatMessages(chatId);
+                
+                this.welcomeScreen.classList.add('hidden');
+                this.chatMessages.classList.remove('hidden');
+                this.messageInputArea.classList.remove('hidden');
+                this.messageInput.disabled = false;
+                this.sendButton.disabled = false;
+                this.messageInput.focus();
+                
+                this.resetUnreadCount(chatId);
+            }
+            
+            showChatMessages(chatId) {
+                const messages = this.messages[chatId] || [];
+                this.chatMessages.innerHTML = '';
+                
+                messages.forEach(msg => {
+                    this.addMessageToChat(msg, false);
+                });
+                
+                this.scrollToBottom();
+            }
+            
+            addMessageToChat(message, scroll = true) {
+                const messageElement = document.createElement('div');
+                const isOwn = message.sender === this.user.username;
+                messageElement.className = `message ${isOwn ? 'outgoing' : 'incoming'}`;
+                
+                messageElement.innerHTML = `
+                    <div class="message-content">
+                        ${!isOwn ? `
+                            <span class="message-sender" style="font-size: 11px;">
+                                ${message.phone}
+                            </span>
+                        ` : ''}
+                        <div class="message-text">${this.escapeHtml(message.text)}</div>
+                        <div class="message-meta">
+                            <span class="message-time">
+                                ${new Date(message.timestamp).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                
+                this.chatMessages.appendChild(messageElement);
+                
+                if (scroll) {
+                    this.scrollToBottom();
+                }
+            }
+            
+            sendMessage() {
+                const text = this.messageInput.value.trim();
+                if (!text || !this.currentChatId || !this.user) return;
+                
+                const chatId = this.currentChatId;
+                const chat = this.chats.find(c => c.id === chatId);
+                if (!chat) return;
+                
+                const messageId = `msg_${Date.now()}`;
+                const timestamp = new Date().toISOString();
+                
+                const newMessage = {
+                    id: messageId,
+                    text,
+                    sender: this.user.username,
+                    timestamp,
+                    phone: this.user.phone,
+                    type: this.user.type
+                };
+                
+                if (!this.messages[chatId]) {
+                    this.messages[chatId] = [];
+                }
+                this.messages[chatId].push(newMessage);
+                
+                const chatIndex = this.chats.findIndex(c => c.id === chatId);
+                if (chatIndex !== -1) {
+                    this.chats[chatIndex].lastMessage = text;
+                    this.chats[chatIndex].lastMessageTime = timestamp;
+                    this.chats[chatIndex].unreadCount = 0;
+                    this.updateChatInList(chatId);
+                }
+                
+                this.saveChats();
+                this.saveMessages();
+                
+                this.addMessageToChat(newMessage);
+                this.messageInput.value = '';
+                this.messageInput.focus();
+                
+                setTimeout(() => {
+                    this.receiveAutoReply(chatId, chat);
+                }, 1000 + Math.random() * 2000);
+            }
+            
+            receiveAutoReply(chatId, chat) {
+                const messageId = `msg_${Date.now()}`;
+                const timestamp = new Date().toISOString();
+                
+                const replies = [
+                    'Привет! Рад тебя видеть!',
+                    'Спасибо за сообщение!',
+                    'Как твои дела?',
+                    'Что нового?',
+                    'Интересно, продолжай!'
+                ];
+                
+                const randomReply = replies[Math.floor(Math.random() * replies.length)];
+                
+                const otherUser = this.usersDatabase[chat.userPhone];
+                if (!otherUser) return;
+                
+                const newMessage = {
+                    id: messageId,
+                    text: randomReply,
+                    sender: otherUser.username,
+                    timestamp,
+                    phone: otherUser.phone,
+                    type: otherUser.type
+                };
+                
+                if (!this.messages[chatId]) {
+                    this.messages[chatId] = [];
+                }
+                this.messages[chatId].push(newMessage);
+                
+                const chatIndex = this.chats.findIndex(c => c.id === chatId);
+                if (chatIndex !== -1) {
+                    this.chats[chatIndex].lastMessage = randomReply;
+                    this.chats[chatIndex].lastMessageTime = timestamp;
+                    this.chats[chatIndex].unreadCount += 1;
+                    this.updateChatInList(chatId);
+                }
+                
+                this.saveChats();
+                this.saveMessages();
+                
+                if (this.currentChatId === chatId) {
+                    this.addMessageToChat(newMessage);
+                }
+            }
+            
+            updateChatInList(chatId) {
+                const chat = this.chats.find(c => c.id === chatId);
+                if (!chat) return;
+                
+                const chatElement = document.querySelector(`.chat-item[data-chat-id="${chatId}"]`);
+                if (chatElement) {
+                    const time = new Date(chat.lastMessageTime).toLocaleTimeString('ru-RU', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    
+                    chatElement.querySelector('.chat-time').textContent = time;
+                    chatElement.querySelector('.chat-preview p').textContent = this.truncateText(chat.lastMessage, 30);
+                    
+                    const unreadCountEl = chatElement.querySelector('.unread-count');
+                    if (chat.unreadCount > 0) {
+                        if (!unreadCountEl) {
+                            const unreadEl = document.createElement('span');
+                            unreadEl.className = 'unread-count';
+                            unreadEl.textContent = chat.unreadCount;
+                            chatElement.querySelector('.chat-preview').appendChild(unreadEl);
+                        } else {
+                            unreadCountEl.textContent = chat.unreadCount;
+                        }
+                    } else if (unreadCountEl) {
+                        unreadCountEl.remove();
+                    }
+                }
+            }
+            
+            resetUnreadCount(chatId) {
+                const chatIndex = this.chats.findIndex(c => c.id === chatId);
+                if (chatIndex !== -1) {
+                    this.chats[chatIndex].unreadCount = 0;
+                    this.updateChatInList(chatId);
+                    this.saveChats();
+                }
+            }
+            
+            saveChats() {
+                if (this.user) {
+                    const userKey = this.user.type === 'virtual' ? this.user.phone.replace(/\s/g, '') : this.user.phone;
+                    localStorage.setItem(`neogram_chats_${userKey}`, JSON.stringify(this.chats));
+                }
+            }
+            
+            saveMessages() {
+                if (this.user) {
+                    const userKey = this.user.type === 'virtual' ? this.user.phone.replace(/\s/g, '') : this.user.phone;
+                    localStorage.setItem(`neogram_messages_${userKey}`, JSON.stringify(this.messages));
+                }
+            }
+            
+            saveUsersDatabase() {
+                localStorage.setItem('neogram_users', JSON.stringify(this.usersDatabase));
+            }
+            
+            openNewChatModal() {
+                const modal = document.createElement('div');
+                modal.className = 'modal';
+                modal.innerHTML = `
+                    <div class="modal-content small-modal">
+                        <div class="modal-header">
+                            <div class="back-btn" id="closeNewChatModal">
+                                <i class="fas fa-arrow-left"></i>
+                            </div>
+                            <h2>Найти пользователя</h2>
+                            <p class="modal-subtitle">Поиск по номеру телефона</p>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="searchPhoneInput">Номер телефона</label>
+                                <input type="text" id="searchPhoneInput" placeholder="+7 900 123 45 67 или +888 XXX XXX XXX">
+                                <small style="color: var(--text-secondary); display: block; margin-top: 5px; font-size: 11px;">
+                                    Введите полный номер пользователя
+                                </small>
+                            </div>
+                            
+                            <button class="btn-primary" id="searchPhoneBtn">
+                                <i class="fas fa-search"></i> Найти
+                            </button>
+                            
+                            <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border-color);">
+                                <p style="color: var(--text-secondary); font-size: 12px; text-align: center;">
+                                    Пользователь должен быть зарегистрирован в системе
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                document.getElementById('closeNewChatModal').addEventListener('click', () => modal.remove());
+                document.getElementById('searchPhoneBtn').addEventListener('click', () => {
+                    this.searchUserByPhone(modal);
+                });
+                
+                document.getElementById('searchPhoneInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.searchUserByPhone(modal);
+                });
+                
+                document.getElementById('searchPhoneInput').focus();
+            }
+            
+            searchUserByPhone(modal) {
+                const phoneInput = document.getElementById('searchPhoneInput').value.trim();
+                if (!phoneInput) {
+                    alert('Введите номер телефона');
+                    return;
+                }
+                
+                const normalizedPhone = phoneInput.replace(/\D/g, '');
+                let foundUser = null;
+                
+                Object.values(this.usersDatabase).forEach(user => {
+                    const userPhone = user.phone.replace(/\D/g, '');
+                    if (userPhone === normalizedPhone) {
+                        foundUser = user;
+                    }
+                });
+                
+                if (foundUser) {
+                    const currentUserKey = this.user.type === 'virtual' ? 
+                        this.user.phone.replace(/\s/g, '') : this.user.phone;
+                    const foundUserKey = foundUser.type === 'virtual' ? 
+                        foundUser.phone.replace(/\s/g, '') : foundUser.phone;
+                    
+                    if (currentUserKey === foundUserKey) {
+                        alert('Нельзя начать чат с самим собой');
+                        return;
+                    }
+                    
+                    this.startChatWithUser(foundUser);
+                    modal.remove();
+                } else {
+                    alert('Пользователь не найден. Убедитесь, что номер введен правильно.');
+                }
+            }
+            
+            startChatWithUser(otherUser) {
+                const existingChat = this.chats.find(chat => 
+                    chat.userPhone === otherUser.phone
+                );
+                
+                if (existingChat) {
+                    this.selectChat(existingChat.id);
+                    return;
+                }
+                
+                const chatId = `chat_${Date.now()}_${this.chats.length}`;
+                const newChat = {
+                    id: chatId,
+                    name: otherUser.name || otherUser.username,
+                    type: 'private',
+                    userId: otherUser.id,
+                    userPhone: otherUser.phone,
+                    userType: otherUser.type,
+                    color: otherUser.color || this.getRandomColor(),
+                    lastMessage: 'Начните общение',
+                    lastMessageTime: new Date().toISOString(),
+                    unreadCount: 0
+                };
+                
+                this.chats.push(newChat);
+                this.messages[chatId] = [];
+                
+                this.saveChats();
+                this.saveMessages();
+                
+                this.addChatToList(newChat);
+                this.selectChat(chatId);
+            }
+            
+            addChatToList(chat) {
+                const chatElement = document.createElement('div');
+                chatElement.className = 'chat-item';
+                chatElement.dataset.chatId = chat.id;
+                
+                const time = new Date(chat.lastMessageTime).toLocaleTimeString('ru-RU', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                chatElement.innerHTML = `
+                    <div class="chat-avatar" style="background: ${chat.color}">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <h4>${chat.name}</h4>
+                            <span class="chat-time">${time}</span>
+                        </div>
+                        <div class="chat-preview">
+                            <p>${this.truncateText(chat.lastMessage, 30)}</p>
+                            ${chat.unreadCount > 0 ? `<span class="unread-count">${chat.unreadCount}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                chatElement.addEventListener('click', () => this.selectChat(chat.id));
+                this.chatsList.appendChild(chatElement);
+                
+                this.updateStats();
+            }
+            
+            openBuyNumberModal() {
+                const modal = document.createElement('div');
+                modal.className = 'modal';
+                modal.innerHTML = `
+                    <div class="modal-content small-modal">
+                        <div class="modal-header">
+                            <div class="back-btn" id="closeBuyNumberModal">
+                                <i class="fas fa-arrow-left"></i>
+                            </div>
+                            <h2>Купить номер</h2>
+                            <p class="modal-subtitle">Выберите тип номера</p>
+                        </div>
+                        <div class="modal-body">
+                            <div class="virtual-numbers-section">
+                                <div class="virtual-number-option" data-prefix="+888">
+                                    <div class="number-prefix" style="color: #10b981;">+888</div>
+                                    <div class="number-description">
+                                        <strong>Базовый номер</strong><br>
+                                        Бесплатно
+                                    </div>
+                                    <div class="number-price free">БЕСПЛАТНО</div>
+                                </div>
+                                
+                                <div class="virtual-number-option selected" data-prefix="+999">
+                                    <div class="number-prefix" style="color: #f59e0b;">+999</div>
+                                    <div class="number-description">
+                                        <strong>Премиум номер</strong><br>
+                                        299 ₽/мес
+                                    </div>
+                                    <div class="number-price">299 ₽</div>
+                                </div>
+                            </div>
+                            
+                            <button class="btn-primary" id="buyNumberConfirmBtn">
+                                <i class="fas fa-shopping-cart"></i> Купить выбранный номер
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                let selectedPrefix = '+999';
+                
+                document.getElementById('closeBuyNumberModal').addEventListener('click', () => modal.remove());
+                
+                modal.querySelectorAll('.virtual-number-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        modal.querySelectorAll('.virtual-number-option').forEach(o => o.classList.remove('selected'));
+                        option.classList.add('selected');
+                        selectedPrefix = option.dataset.prefix;
+                    });
+                });
+                
+                document.getElementById('buyNumberConfirmBtn').addEventListener('click', () => {
+                    this.buyVirtualNumber(selectedPrefix);
+                    modal.remove();
+                });
+            }
+            
+            buyVirtualNumber(prefix) {
+                if (!this.user) return;
+                
+                const numberInfo = this.virtualNumbers[prefix];
+                if (!numberInfo) return;
+                
+                if (prefix === '+888') {
+                    const newNumber = {
+                        phone: this.generateVirtualNumber(prefix),
+                        type: 'virtual',
+                        virtualType: prefix,
+                        isDefault: false,
+                        purchasedAt: new Date().toISOString()
+                    };
+                    
+                    this.user.numbers.push(newNumber);
+                    this.updateUserNumbers();
+                    this.saveUser();
+                    this.updateStats();
+                    
+                    alert(`Бесплатный виртуальный номер ${newNumber.phone} добавлен!`);
+                } else {
+                    alert(`Демо: Виртуальный номер ${prefix} куплен за ${numberInfo.price} ₽`);
+                    
+                    const newNumber = {
+                        phone: this.generateVirtualNumber(prefix),
+                        type: 'virtual',
+                        virtualType: prefix,
+                        isDefault: false,
+                        purchasedAt: new Date().toISOString(),
+                        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+                    };
+                    
+                    this.user.numbers.push(newNumber);
+                    this.updateUserNumbers();
+                    this.saveUser();
+                    this.updateStats();
+                }
+            }
+            
+            openSettingsModal() {
+                const modal = document.createElement('div');
+                modal.className = 'modal';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="back-btn" id="closeSettingsModal">
+                                <i class="fas fa-arrow-left"></i>
+                            </div>
+                            <h2>Настройки</h2>
+                            <p class="modal-subtitle">Настройте NeoGram под себя</p>
+                        </div>
+                        <div class="modal-body">
+                            <div class="user-info-settings">
+                                <div class="avatar user-avatar" id="settingsAvatarPreview" style="${this.user ? `background: ${this.user.avatarColor || this.settings.avatarColor}` : ''}">
+                                    <i class="fas fa-user" id="settingsAvatarIcon"></i>
+                                </div>
+                                <div class="user-info-details">
+                                    <h3 id="settingsUserName">${this.user?.displayName || 'Пользователь'}</h3>
+                                    <p id="settingsUserUsername">@${this.user?.username || 'username'}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-section">
+                                <h3><i class="fas fa-user-edit"></i> Профиль</h3>
+                                <div class="form-group">
+                                    <label for="settingsName">Имя</label>
+                                    <input type="text" id="settingsName" value="${this.user?.displayName || ''}" placeholder="Ваше имя">
+                                </div>
+                                <div class="form-group">
+                                    <label for="settingsUsername">Юзернейм</label>
+                                    <input type="text" id="settingsUsername" value="${this.user?.username || ''}" placeholder="username">
+                                </div>
+                                
+                                <div class="avatar-options">
+                                    <div class="avatar-option ${this.settings.avatar === 'default' ? 'selected' : ''}" data-avatar="default" style="background: #667eea;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="avatar-option ${this.settings.avatar === 'cat' ? 'selected' : ''}" data-avatar="cat" style="background: #f59e0b;">
+                                        <i class="fas fa-cat"></i>
+                                    </div>
+                                    <div class="avatar-option ${this.settings.avatar === 'dog' ? 'selected' : ''}" data-avatar="dog" style="background: #10b981;">
+                                        <i class="fas fa-dog"></i>
+                                    </div>
+                                    <div class="avatar-option ${this.settings.avatar === 'robot' ? 'selected' : ''}" data-avatar="robot" style="background: #ef4444;">
+                                        <i class="fas fa-robot"></i>
+                                    </div>
+                                    <div class="avatar-option ${this.settings.avatar === 'game' ? 'selected' : ''}" data-avatar="game" style="background: #8b5cf6;">
+                                        <i class="fas fa-gamepad"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="color-picker">
+                                    <div class="color-option ${this.settings.avatarColor === '#667eea' ? 'selected' : ''}" style="background: #667eea;" data-color="#667eea"></div>
+                                    <div class="color-option ${this.settings.avatarColor === '#f59e0b' ? 'selected' : ''}" style="background: #f59e0b;" data-color="#f59e0b"></div>
+                                    <div class="color-option ${this.settings.avatarColor === '#10b981' ? 'selected' : ''}" style="background: #10b981;" data-color="#10b981"></div>
+                                    <div class="color-option ${this.settings.avatarColor === '#ef4444' ? 'selected' : ''}" style="background: #ef4444;" data-color="#ef4444"></div>
+                                    <div class="color-option ${this.settings.avatarColor === '#8b5cf6' ? 'selected' : ''}" style="background: #8b5cf6;" data-color="#8b5cf6"></div>
+                                    <div class="color-option ${this.settings.avatarColor === '#ec4899' ? 'selected' : ''}" style="background: #ec4899;" data-color="#ec4899"></div>
+                                </div>
+                                
+                                <div class="avatar-upload-btn" id="uploadAvatarBtn">
+                                    <i class="fas fa-upload"></i> Загрузить фото
+                                </div>
+                            </div>
+                            
+                            <div class="settings-section">
+                                <h3><i class="fas fa-palette"></i> Тема</h3>
+                                <div class="settings-options">
+                                    <div class="theme-option ${this.settings.theme === 'theme-dark' ? 'selected' : ''}" data-theme="theme-dark">
+                                        <div class="theme-preview" style="--preview-sidebar: #1e293b; --preview-chat: #0f172a;">
+                                            <div class="sidebar-preview"></div>
+                                            <div class="chat-preview"></div>
+                                        </div>
+                                        <div class="theme-name">Темная</div>
+                                    </div>
+                                    <div class="theme-option ${this.settings.theme === 'theme-light' ? 'selected' : ''}" data-theme="theme-light">
+                                        <div class="theme-preview" style="--preview-sidebar: #ffffff; --preview-chat: #f8fafc;">
+                                            <div class="sidebar-preview"></div>
+                                            <div class="chat-preview"></div>
+                                        </div>
+                                        <div class="theme-name">Светлая</div>
+                                    </div>
+                                    <div class="theme-option ${this.settings.theme === 'theme-midnight' ? 'selected' : ''}" data-theme="theme-midnight">
+                                        <div class="theme-preview" style="--preview-sidebar: #141421; --preview-chat: #0a0a0f;">
+                                            <div class="sidebar-preview"></div>
+                                            <div class="chat-preview"></div>
+                                        </div>
+                                        <div class="theme-name">Полуночная</div>
+                                    </div>
+                                    <div class="theme-option ${this.settings.theme === 'theme-ocean' ? 'selected' : ''}" data-theme="theme-ocean">
+                                        <div class="theme-preview" style="--preview-sidebar: #075985; --preview-chat: #0c4a6e;">
+                                            <div class="sidebar-preview"></div>
+                                            <div class="chat-preview"></div>
+                                        </div>
+                                        <div class="theme-name">Океан</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-section">
+                                <h3><i class="fas fa-image"></i> Фон чата</h3>
+                                <div class="settings-options">
+                                    <div class="bg-option ${this.settings.chatBackground === 'chat-bg-default' ? 'selected' : ''}" data-bg="chat-bg-default">
+                                        <div class="bg-preview" style="background: var(--chat-bg);"></div>
+                                        <div class="bg-name">По умолчанию</div>
+                                    </div>
+                                    <div class="bg-option ${this.settings.chatBackground === 'chat-bg-pattern' ? 'selected' : ''}" data-bg="chat-bg-pattern">
+                                        <div class="bg-preview" style="background: var(--chat-bg) url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0LjVjMCAxLjM4LTEuMTIgMi41LTIuNSAyLjVIMjYuNWMtMS4zOCAwLTIuNS0xLjEyLTIuNS0yLjV2LTljMC0xLjM4IDEuMTItMi41IDIuNS0yLjVoN2MxLjM4IDAgMi41IDEuMTIgMi41IDIuNXY5em0tMTggOWMwIDEuMzgtMS4xMiAyLjUtMi41IDIuNUg4LjVjLTEuMzggMC0yLjUtMS4xMi0yLjUtMi41di05YzAtMS4zOCAxLjEyLTIuNSAyLjUtMi41aDdjMS4zOCAwIDIuNSAxLjEyIDIuNSAyLjV2OXpNMzYgMTYuNWMwIDEuMzgtMS4xiiAyLjUtMi41IDIuNUgyNi41Yy0xLjM4IDAtMi41LTEuMTItMi41LTIuNXYtOWMwLTEuMzggMS4xMi0yLjUgMi41LTIuNWg3YzEuMzggMCAyLjUgMS4xMiAyLjUgMi41djl6Ii8+PC9nPjwvZz48L3N2Zz4=');"></div>
+                                        <div class="bg-name">Узор</div>
+                                    </div>
+                                    <div class="bg-option ${this.settings.chatBackground === 'chat-bg-grid' ? 'selected' : ''}" data-bg="chat-bg-grid">
+                                        <div class="bg-preview" style="background: linear-gradient(90deg, var(--border-color) 1px, transparent 1px) 0 0 / 20px 20px, linear-gradient(var(--border-color) 1px, transparent 1px) 0 0 / 20px 20px, var(--chat-bg);"></div>
+                                        <div class="bg-name">Сетка</div>
+                                    </div>
+                                    <div class="bg-option ${this.settings.chatBackground === 'chat-bg-gradient' ? 'selected' : ''}" data-bg="chat-bg-gradient">
+                                        <div class="bg-preview" style="background: linear-gradient(135deg, var(--dark-bg) 0%, var(--sidebar-bg) 100%);"></div>
+                                        <div class="bg-name">Градиент</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-section">
+                                <h3><i class="fas fa-bell"></i> Уведомления</h3>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Уведомления</h4>
+                                        <p>Включить звуковые уведомления</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notificationsToggle" ${this.settings.notifications ? 'checked' : ''}>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Звук</h4>
+                                        <p>Включить звуковые оповещения</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="soundToggle" ${this.settings.sound ? 'checked' : ''}>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <button class="save-settings-btn" id="saveSettingsBtn">
+                                <i class="fas fa-save"></i> Сохранить изменения
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                // Обновляем превью аватарки
+                const avatarPreview = modal.querySelector('#settingsAvatarPreview');
+                const avatarIcon = modal.querySelector('#settingsAvatarIcon');
+                if (this.user && this.user.avatar && this.user.avatar !== 'default') {
+                    avatarPreview.style.backgroundImage = `url('${this.user.avatar}')`;
+                    avatarPreview.style.backgroundColor = 'transparent';
+                    avatarIcon.style.display = 'none';
+                } else {
+                    avatarPreview.style.backgroundImage = 'none';
+                    avatarPreview.style.backgroundColor = this.user?.avatarColor || this.settings.avatarColor;
+                    avatarIcon.style.display = 'flex';
+                    avatarIcon.className = this.getAvatarIcon(this.settings.avatar);
+                }
+                
+                // Event handlers
+                document.getElementById('closeSettingsModal').addEventListener('click', () => modal.remove());
+                
+                // Avatar selection
+                modal.querySelectorAll('.avatar-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        modal.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+                        option.classList.add('selected');
+                        this.settings.avatar = option.dataset.avatar;
+                        
+                        // Update preview
+                        avatarIcon.className = this.getAvatarIcon(this.settings.avatar);
+                        avatarPreview.style.backgroundColor = this.settings.avatarColor;
+                    });
+                });
+                
+                // Color selection
+                modal.querySelectorAll('.color-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        modal.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
+                        option.classList.add('selected');
+                        this.settings.avatarColor = option.dataset.color;
+                        
+                        // Update preview
+                        avatarPreview.style.backgroundColor = this.settings.avatarColor;
+                    });
+                });
+                
+                // Theme selection
+                modal.querySelectorAll('.theme-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        modal.querySelectorAll('.theme-option').forEach(o => o.classList.remove('selected'));
+                        option.classList.add('selected');
+                        this.settings.theme = option.dataset.theme;
+                        
+                        // Apply theme to modal for preview
+                        const modalContent = modal.querySelector('.modal-content');
+                        modalContent.classList.remove('theme-dark', 'theme-light', 'theme-midnight', 'theme-ocean');
+                        modalContent.classList.add(this.settings.theme);
+                    });
+                });
+                
+                // Background selection
+                modal.querySelectorAll('.bg-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        modal.querySelectorAll('.bg-option').forEach(o => o.classList.remove('selected'));
+                        option.classList.add('selected');
+                        this.settings.chatBackground = option.dataset.bg;
+                    });
+                });
+                
+                // Upload avatar
+                document.getElementById('uploadAvatarBtn').addEventListener('click', () => {
+                    this.uploadAvatar(modal);
+                });
+                
+                // Save settings
+                document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+                    this.saveUserSettings(modal);
+                });
+            }
+            
+            uploadAvatar(modal) {
+                // Демо-функция загрузки аватарки
+                const avatarUrl = prompt('Введите URL аватарки (для демо используйте любой URL изображения):', 'https://i.pravatar.cc/300');
+                if (avatarUrl) {
+                    this.settings.avatar = 'custom';
+                    this.user.avatar = avatarUrl;
+                    
+                    // Update preview
+                    const avatarPreview = modal.querySelector('#settingsAvatarPreview');
+                    const avatarIcon = modal.querySelector('#settingsAvatarIcon');
+                    avatarPreview.style.backgroundImage = `url('${avatarUrl}')`;
+                    avatarPreview.style.backgroundColor = 'transparent';
+                    avatarIcon.style.display = 'none';
+                    
+                    // Mark custom avatar
+                    modal.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+                }
+            }
+            
+            saveUserSettings(modal) {
+                if (!this.user) return;
+                
+                // Update user info
+                const nameInput = document.getElementById('settingsName');
+                const usernameInput = document.getElementById('settingsUsername');
+                
+                if (nameInput.value.trim()) {
+                    this.user.displayName = nameInput.value.trim();
+                    this.user.name = nameInput.value.trim();
+                }
+                
+                if (usernameInput.value.trim()) {
+                    this.user.username = usernameInput.value.trim().replace('@', '');
+                }
+                
+                // Update avatar
+                if (this.settings.avatar === 'custom' && this.user.avatar) {
+                    this.user.avatar = this.user.avatar;
+                } else {
+                    this.user.avatar = this.settings.avatar;
+                }
+                this.user.avatarColor = this.settings.avatarColor;
+                
+                // Update notifications settings
+                this.settings.notifications = document.getElementById('notificationsToggle').checked;
+                this.settings.sound = document.getElementById('soundToggle').checked;
+                
+                // Save settings
+                this.saveSettings();
+                this.saveUser();
+                
+                // Update UI
+                this.userDisplayName.textContent = this.user.displayName;
+                this.userUsername.textContent = `@${this.user.username}`;
+                this.updateUserAvatar();
+                this.applySettings();
+                
+                // Close modal
+                modal.remove();
+                
+                alert('Настройки сохранены!');
+            }
+            
+            resendCode() {
+                alert('Код отправлен повторно');
+                this.startTimer();
+                
+                setTimeout(() => {
+                    const code = '54321';
+                    this.codeDigits.forEach((digit, index) => {
+                        digit.value = code[index] || '';
+                    });
+                    this.checkCodeComplete();
+                }, 800);
+            }
+            
+            filterChats() {
+                const searchTerm = this.searchInput.value.toLowerCase();
+                const chatItems = this.chatsList.querySelectorAll('.chat-item');
+                
+                chatItems.forEach(item => {
+                    const chatName = item.querySelector('h4').textContent.toLowerCase();
+                    const lastMessage = item.querySelector('.chat-preview p').textContent.toLowerCase();
+                    
+                    if (chatName.includes(searchTerm) || lastMessage.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+            
+            getRandomColor() {
+                const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe', '#43e97b'];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            truncateText(text, maxLength) {
+                if (!text) return '';
+                if (text.length <= maxLength) return text;
+                return text.substring(0, maxLength) + '...';
+            }
+            
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+            
+            scrollToBottom() {
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }
+            
+            logout() {
+                if (confirm('Вы уверены, что хотите выйти?')) {
+                    localStorage.removeItem('neogram_session');
+                    
+                    this.user = null;
+                    this.chats = [];
+                    this.messages = {};
+                    this.currentChatId = null;
+                    
+                    this.showAuth();
+                }
+            }
+        }
+        
+        // Инициализация приложения
+        document.addEventListener('DOMContentLoaded', () => {
+            window.app = new NeoGram();
+        });
+    </script>
+</body>
+</html>
